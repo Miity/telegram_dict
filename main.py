@@ -94,10 +94,13 @@ def main():
 
         #вибираємо режим
         mode = None
-        
-        if user_hist['result'][-2]['message']['text'] == '/del':
-            mode = 'del'
-
+        '''
+        try:
+            if user_hist['result'][-2]['message']['text'] == '/del':
+                mode = 'del'
+        except:
+            pass
+        '''
         if mode == 'del':
             send_message(user_hist, 
             text='Я ще не вмію')

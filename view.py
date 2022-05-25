@@ -4,6 +4,7 @@ import time
 from dictionary import *
 from secret import URL
 
+
 def read_text(r):
     text = r['message']['text']
     return text 
