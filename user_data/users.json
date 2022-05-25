@@ -1,0 +1,20 @@
+{
+  "users": [
+    {
+      "id": 564575849,
+      "is_bot": false,
+      "first_name": "Дмитрий",
+      "last_name": "Андреюк",
+      "username": "Dima_divepoint",
+      "language_code": "uk"
+    },
+    {
+      "id": 965039668,
+      "is_bot": false,
+      "first_name": "Елизавета",
+      "last_name": "Андреюк",
+      "username": "Liza_Beta",
+      "language_code": "en"
+    }
+  ]
+}

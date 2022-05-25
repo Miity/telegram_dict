@@ -1,0 +1,95 @@
+{
+  "ok": true,
+  "result": [
+    {
+      "update_id": 896470619,
+      "message": {
+        "message_id": 1097,
+        "from": {
+          "id": 564575849,
+          "is_bot": false,
+          "first_name": "Дмитрий",
+          "last_name": "Андреюк",
+          "username": "Dima_divepoint",
+          "language_code": "uk"
+        },
+        "chat": {
+          "id": 564575849,
+          "first_name": "Дмитрий",
+          "last_name": "Андреюк",
+          "username": "Dima_divepoint",
+          "type": "private"
+        },
+        "date": 1653460610,
+        "text": "/show",
+        "entities": [
+          {
+            "offset": 0,
+            "length": 5,
+            "type": "bot_command"
+          }
+        ]
+      }
+    },
+    {
+      "update_id": 896470620,
+      "message": {
+        "message_id": 1098,
+        "from": {
+          "id": 564575849,
+          "is_bot": false,
+          "first_name": "Дмитрий",
+          "last_name": "Андреюк",
+          "username": "Dima_divepoint",
+          "language_code": "uk"
+        },
+        "chat": {
+          "id": 564575849,
+          "first_name": "Дмитрий",
+          "last_name": "Андреюк",
+          "username": "Dima_divepoint",
+          "type": "private"
+        },
+        "date": 1653460620,
+        "text": "/start",
+        "entities": [
+          {
+            "offset": 0,
+            "length": 6,
+            "type": "bot_command"
+          }
+        ]
+      }
+    },
+    {
+      "update_id": 896470621,
+      "message": {
+        "message_id": 1100,
+        "from": {
+          "id": 564575849,
+          "is_bot": false,
+          "first_name": "Дмитрий",
+          "last_name": "Андреюк",
+          "username": "Dima_divepoint",
+          "language_code": "uk"
+        },
+        "chat": {
+          "id": 564575849,
+          "first_name": "Дмитрий",
+          "last_name": "Андреюк",
+          "username": "Dima_divepoint",
+          "type": "private"
+        },
+        "date": 1653460631,
+        "text": "/h",
+        "entities": [
+          {
+            "offset": 0,
+            "length": 2,
+            "type": "bot_command"
+          }
+        ]
+      }
+    }
+  ]
+}
