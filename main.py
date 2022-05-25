@@ -75,7 +75,7 @@ def main():
             # new User dict
             filename = 'user_data/' + str(user_id) +'_dict.json'
             with open(filename, 'w') as f:
-                dic = {'words':[]}
+                dic = {'words':{}}
                 json.dump(dic, f, 
                     indent=2, ensure_ascii = False)
         else:
