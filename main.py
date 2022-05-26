@@ -110,7 +110,7 @@ def main():
                 mode = 'stop_study'
 
         
-        if mode == "delete" and isinstance(user_hist['result'][-1]['message']['text'], numbers.Number):
+        if mode == "delete" and isinstance(int(user_hist['result'][-1]['message']['text']), numbers.Number):
             i = user_hist['result'][-1]['message']['text']
             l = []
             for x,y in dic['words'].items():
