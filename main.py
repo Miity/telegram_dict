@@ -17,7 +17,11 @@ def get_updates(offset = None):
     return r.json()
 
 def is_new_updates(r, update_id):
-    if r['result'][-1]['update_id'] != update_id:
+
+    if 'result' not in r:
+        print('False')
+        return False
+    elif r['result'][-1]['update_id'] != update_id:
         update_id = r['result'][-1]['update_id']
         return True
     elif update_id == r['result'][-1]['update_id']:
@@ -93,19 +97,28 @@ def main():
         dic = load_json('user_data/' + str(user_id)+'_dict.json')
 
         #вибираємо режим
+        #видалення
+        #вивчення( добавити до навчання)
         mode = None
-        '''
-        try:
-            if user_hist['result'][-2]['message']['text'] == '/del':
-                mode = 'del'
-        except:
-            pass
-        '''
-        if mode == 'del':
-            send_message(user_hist, 
-            text='Я ще не вмію')
-            words=dic['words']
+        if len(user_hist['result'])>=2:
+            if user_hist['result'][-2]['message']['text'] == '/delete':
+                mode = 'delete'
+            elif user_hist['result'][-1]['message']['text'] == '/study':
+                mode = 'study'
+            elif user_hist['result'][-1]['message']['text'] == '/stop_study':
+                mode = 'stop_study'
 
+        
+        if mode == "delete":
+            i = user_hist['result'][-1]['message']['text']
+            l = []
+            for x,y in dic['words'].items():
+                l.append(x)
+            word = l[int(i)]
+            print(word)
+            dic['words'].pop(word)
+            send_message(user_hist, 
+            text='я видалив: ' + word)
         else:
             make_response(user_hist, dic) 
 

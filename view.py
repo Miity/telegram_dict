@@ -15,6 +15,18 @@ def send_message(r, text):
     answer = {'chat_id': chat_id, 'text': text}
     r = requests.post(url, json = answer)
 
+def show_all_words(user_hist, dic):
+    words = ''
+    j=0
+    for i in dic['words']: 
+        word = str(j) + '. ' + i+' - '+ dic['words'][i] + "\n"
+        words = words + word
+        j+=1
+    send_message(user_hist, words)
+
+
+
+
 def make_response(user_hist, dic):
     user_req=user_hist['result'][-1]
     text = read_text(user_req)
@@ -29,22 +41,17 @@ def make_response(user_hist, dic):
         text = "Окей, давай начнем. Я загрузил ваш словарь"
         send_message(user_hist, text)
 
-    elif text == '/help' or text == '/h':
+    elif text == '/help':
         text = '/start \n /stop \n /show \n /del /d'
         send_message(user_hist, text)
 
-    elif text == '/del' or text == '/d':
+    elif text == '/delete':
         text = 'какой номер вы хотите удалить?'
-        send_message(r, text + '\n' + show_all_words(dic))
+        send_message(user_hist, text)
+        show_all_words(user_hist, dic)
 
     elif text == '/show':
-        words = ''
-        j=0
-        for i in dic['words']: 
-            word = str(j) + '. ' + i+' - '+ dic['words'][i] + "\n"
-            words = words + word
-            j+=1
-        send_message(user_hist, words)
+        show_all_words(user_hist, dic)
             
     else:
         translate = translation(text)
