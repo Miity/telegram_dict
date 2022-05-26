@@ -111,28 +111,28 @@ def main():
 
         
         if mode == "delete":
-            
-
+            print('delete')
             try: 
                 i = int(user_hist['result'][-1]['message']['text'])
+                l = []
+                for x,y in dic['words'].items():
+                    l.append(x)
+                word = l[i]
+                print(word)
+                dic['words'].pop(word)
+
+                # new User dict
+                filename = 'user_data/' + str(user_id) +'_dict.json'
+                with open(filename, 'w') as f:
+                    json.dump(dic, f, 
+                        indent=2, ensure_ascii = False)
+
+                send_message(user_hist, 
+                text='я видалив: ' + word)
             except:
                 make_response(user_hist, dic) 
 
-            l = []
-            for x,y in dic['words'].items():
-                l.append(x)
-            word = l[int(i)]
-            print(word)
-            dic['words'].pop(word)
-
-            # new User dict
-            filename = 'user_data/' + str(user_id) +'_dict.json'
-            with open(filename, 'w') as f:
-                json.dump(dic, f, 
-                    indent=2, ensure_ascii = False)
-
-            send_message(user_hist, 
-            text='я видалив: ' + word)
+            
         else:
             make_response(user_hist, dic) 
 
