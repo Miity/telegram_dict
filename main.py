@@ -1,6 +1,7 @@
 import time
 from view import *
 import json
+import numbers
 
 
 def load_json(filename):
@@ -109,7 +110,7 @@ def main():
                 mode = 'stop_study'
 
         
-        if mode == "delete":
+        if mode == "delete" and isinstance(user_hist['result'][-1]['message']['text'], numbers.Number):
             i = user_hist['result'][-1]['message']['text']
             l = []
             for x,y in dic['words'].items():
@@ -117,6 +118,13 @@ def main():
             word = l[int(i)]
             print(word)
             dic['words'].pop(word)
+
+            # new User dict
+            filename = 'user_data/' + str(user_id) +'_dict.json'
+            with open(filename, 'w') as f:
+                json.dump(dic, f, 
+                    indent=2, ensure_ascii = False)
+
             send_message(user_hist, 
             text='я видалив: ' + word)
         else:
