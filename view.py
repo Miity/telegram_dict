@@ -33,7 +33,7 @@ def make_response(user_hist, dic):
 
     if text == '/stop':
         print('stop!!!')
-        text = "Окей, увидимся в другой раз"
+        text = "Добре, бувай. Побачемось іншим разом."
         send_message(user_hist, text)
 
     elif text == '/start':
@@ -46,7 +46,7 @@ def make_response(user_hist, dic):
         send_message(user_hist, text)
 
     elif text == '/delete':
-        text = 'какой номер вы хотите удалить?'
+        text = 'Який номер хочешь видалити?'
         send_message(user_hist, text)
         show_all_words(user_hist, dic)
 
@@ -64,7 +64,7 @@ def make_response(user_hist, dic):
                 indent=2, ensure_ascii = False)
 
         send_message(user_hist, 
-            text='я добавлю это в твой словарь: ' + translate)
+            text='Я добавлю це в твій словарик: ' + translate)
 
 
 
