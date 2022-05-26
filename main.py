@@ -110,8 +110,14 @@ def main():
                 mode = 'stop_study'
 
         
-        if mode == "delete" and isinstance(int(user_hist['result'][-1]['message']['text']), numbers.Number):
-            i = user_hist['result'][-1]['message']['text']
+        if mode == "delete":
+            
+
+            try: 
+                i = int(user_hist['result'][-1]['message']['text'])
+            except:
+                make_response(user_hist, dic) 
+
             l = []
             for x,y in dic['words'].items():
                 l.append(x)
