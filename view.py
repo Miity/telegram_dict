@@ -5,9 +5,32 @@ from dictionary import *
 from secret import URL
 
 
-def read_text(r):
-    text = r['message']['text']
-    return text 
+def write_json(data, filename):
+    with open(filename, 'w') as f:
+        json.dump(data, f, 
+            indent=2, ensure_ascii = False)
+
+def load_json(filename):
+    with open(filename) as json_data:
+        json_data = json.load(json_data)
+    return json_data
+
+def get_updates(offset = None):
+    url = URL + "getUpdates"
+    if offset:
+        r = requests.get(url, params = {'offset': offset })
+    else:
+        r = requests.get(url)
+    return r.json()
+
+def is_new_updates(r, update_id):
+    if 'result' not in r:
+        return False
+    elif r['result'][-1]['update_id'] != update_id:
+        update_id = r['result'][-1]['update_id']
+        return True
+    elif update_id == r['result'][-1]['update_id']:
+        return False
 
 def send_message(r, text):
     chat_id = r['result'][-1]['message']['chat']['id']
@@ -25,30 +48,21 @@ def show_all_words(user_hist, dic):
     send_message(user_hist, words)
 
 
-
-
 def make_response(user_hist, dic):
     user_req=user_hist['result'][-1]
-    text = read_text(user_req)
+    text = user_req['message']['text']
 
     if text == '/stop':
-        print('stop!!!')
         text = "Добре, бувай. Побачемось іншим разом."
         send_message(user_hist, text)
 
     elif text == '/start':
-        print('start')
         text = "Привіт, я допоможу тобі запам'ятати нові слова. \n\nВідправляй всі слова, що хочеш перекласти, я запишу їх до словника. \n\nТи можешь подивитись свій словник, відправ мені команду /show \n\nБільше команд, ти знайдеш у меню знизу."
         send_message(user_hist, text)
 
     elif text == '/help':
         text = '/start \n /stop \n /show \n /del /d'
         send_message(user_hist, text)
-
-    elif text == '/delete':
-        text = 'Який номер хочешь видалити?'
-        send_message(user_hist, text)
-        show_all_words(user_hist, dic)
 
     elif text == '/show':
         show_all_words(user_hist, dic)
@@ -62,9 +76,7 @@ def make_response(user_hist, dic):
         with open(filename, 'w') as f:
             json.dump(dic, f, 
                 indent=2, ensure_ascii = False)
-
-        send_message(user_hist, 
-            text='Я добавлю це в твій словарик: ' + translate)
+        send_message(user_hist, text=translate)
 
 
 
