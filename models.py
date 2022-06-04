@@ -5,10 +5,9 @@ user_directory = "user_data/"
 
 class User(): 
   def __init__(self, id):
-    global index
     data = load_json(user_directory+'users.json')
     find = False
-    index = 0
+    self.index = 0
     for i in data['users']:
       if i['id'] == id:
         self.id = i['id']
@@ -17,7 +16,7 @@ class User():
         find = True
         break
       else:
-        index+=1
+        self.index+=1
 
     if find == False:
       self.id = id
@@ -30,7 +29,7 @@ class User():
                 }
               }
       data['users'].append(user)
-      index=len(data['users'])-1
+      self.index=len(data['users'])-1
       write_json(data=data,filename=user_directory+'users.json')
 
   def update(self, *args, **kwargs):
@@ -38,10 +37,10 @@ class User():
     data = load_json(filename)
     if kwargs:
       for x,y in kwargs.items():
-        data['users'][index]['data'][x]=y 
+        data['users'][self.index]['data'][x]=y 
     write_json(data, filename)
 
-    for x,y in data['users'][index]['data'].items():
+    for x,y in data['users'][self.index]['data'].items():
         setattr(self, x, y)
 
   def reset(self):
@@ -49,8 +48,8 @@ class User():
     self.mode_step = None
     filename = user_directory+'users.json'
     data = load_json(filename)
-    data['users'][index]['data']['mode'] = self.mode
-    data['users'][index]['data']['mode_step'] = self.mode_step
+    data['users'][self.index]['data']['mode'] = self.mode
+    data['users'][self.index]['data']['mode_step'] = self.mode_step
     write_json(data, filename)
 
   def rewrite_hist(self, new_data):
