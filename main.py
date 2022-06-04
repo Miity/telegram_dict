@@ -80,7 +80,7 @@ def main():
                     user.reset()
                 except:
                     print('index not find')
-                    make_response(user, user_hist, user_dic) 
+                    make_response(user, user_hist, dictionary) 
                     user.reset()
 
         elif  user.mode == "study" and user.mode_step < 3:
