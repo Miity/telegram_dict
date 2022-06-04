@@ -8,9 +8,8 @@ from utils import *
 
 def main():
     r = get_updates()
-    write_json(r,'json/answer.json')
-    update_id = r['result'][-1]['update_id']
-
+    update_id = 0
+    
     while True:
         #чекаємо на новий запит
         while is_new_updates(r, update_id) == False:
