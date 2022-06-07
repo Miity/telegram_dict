@@ -29,7 +29,7 @@ def main():
                             #відправляємо рандомне слово
                             dictionary = Dictionary(user.id).open()
                             x,y = random.choice(list(dictionary["words"].items()))
-                            send_message(user, x + ' - ' + y)
+                            send_message(user, text=x + ' - ' + y)
 
                 r = get_updates()   
 
@@ -68,8 +68,8 @@ def main():
         # обробляємо режими
         if user.mode == "delete":
             if user.mode_step == 1:
-                send_message(user, 'Який номер хочешь видалити?')
-                send_message(user, dictionary.show_all_words())
+                send_message(user,  text='Який номер хочешь видалити?')
+                send_message(user, text= textdictionary.show_all_words())
                 user.update(mode_step=2)
             elif user.mode_step == 2:
                 try: 
