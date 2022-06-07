@@ -3,8 +3,8 @@ from googletrans import Translator
 
 translator = Translator()
 
-def translation(text):
-    translation = translator.translate(text, dest='en')
+def translation(text, dest='en'):
+    translation = translator.translate(text, dest)
     return translation.text
 
 

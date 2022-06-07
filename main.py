@@ -24,8 +24,6 @@ def main():
                 for user in users['users']:
                     user = User(user['id'])
                     if user.mode == 'study' and user.mode_step == 3:
-                        print('study mode: ', user.id)
-                        print('time to send:', time.time()-user.start_time)
                         if time.time() >= user.start_time + user.wait_time:
                             user.update(start_time=time.time())
                             #відправляємо рандомне слово
@@ -50,7 +48,7 @@ def main():
         user = User(user_id)
         user.update(chat_id=user_chat_id)
         user.rewrite_hist(last_r)
-        dictionary = Dictionary(user_id)
+        dictionary = Dictionary(user.id, user.dict_language)
 
         # загружаємо останні данні
         user_hist = load_json('user_data/' + str(user.id) +'_hist.json')
@@ -65,6 +63,7 @@ def main():
             user.reset()
         elif user_hist['result'][-1]['message']['text'] == '/settings':
             user.update(mode='settings')
+
 
         # обробляємо режими
         if user.mode == "delete":
@@ -85,7 +84,6 @@ def main():
 
         elif  user.mode == "study" and user.mode_step < 3:
             if user.mode_step == 1:
-                print("study mode")
                 send_message(user, text='Окей, я буду відправляти вам одне із слів')
                 send_message(user, text='Як часто відправляти?')
                 send_message(user, text='напишіть раз у скільки хвилин')

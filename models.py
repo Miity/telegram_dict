@@ -25,7 +25,8 @@ class User():
       user = {'id':self.id,
               'data':{
                 'mode':None,
-                'mode_step':None,    
+                'mode_step':None,  
+                'dict_language':'en'  
                 }
               }
       data['users'].append(user)
@@ -60,9 +61,10 @@ class User():
 
 
 class Dictionary():
-  def __init__(self, id):
+  def __init__(self, id, language='en'):
     self.owner_id = id
-    self.filename = str(self.owner_id) +'_dict.json'
+    self.language = language
+    self.filename = str(self.owner_id)+'_'+self.language+'_dict.json'
     self.path = user_directory + self.filename
     try:
       load_json(self.path)
