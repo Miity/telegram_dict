@@ -69,7 +69,7 @@ def main():
         if user.mode == "delete":
             if user.mode_step == 1:
                 send_message(user,  text='Який номер хочешь видалити?')
-                send_message(user, text= textdictionary.show_all_words())
+                send_message(user, text= dictionary.show_all_words())
                 user.update(mode_step=2)
             elif user.mode_step == 2:
                 try: 
