@@ -1,107 +1,69 @@
-from datetime import datetime
-import time
-from view import *
+from time import time, sleep
 import random
+from my_telegram import BOT
 from models import User, Dictionary
-from utils import *
+from utils import load_json
+from secret import token
+from view import *
+from dictionary import translation
 
 
 def main():
-    r = get_updates()
-    update_id = 0
-    
-    while True:
-        #чекаємо на новий запит
-        while is_new_updates(r, update_id) == False:
-            time.sleep(2)
-
-            if len(r['result']) > 10:
-                r = get_updates(offset = r['result'][-1]['update_id'])
-
-            else:
-                #якщо режим навчання
-                users = load_json('user_data/users.json')
-                for user in users['users']:
-                    user = User(user['id'])
-                    if user.mode == 'study' and user.mode_step == 3:
-                        if time.time() >= user.start_time + user.wait_time:
-                            user.update(start_time=time.time())
-                            #відправляємо рандомне слово
-                            dictionary = Dictionary(user.id).open()
-                            x,y = random.choice(list(dictionary["words"].items()))
-                            send_message(user, text=x + ' - ' + y)
-
-                r = get_updates()   
-
-        update_id = r['result'][-1]['update_id']
-
-        
+    if bot.is_new_updates():
 
         # дістаємо інфу з телеграмму
-        last_r = r['result'][-1]
-        user_id = r['result'][-1]['message']['from']['id']
-        user_chat_id = r['result'][-1]['message']['chat']['id']
+        user_id = bot.updates['result'][-1]['message']['from']['id']
+        user_chat_id = bot.updates['result'][-1]['message']['chat']['id']
 
         # ініціалізуємо юзера та його словарь
-        last_r = r['result'][-1]
-        user_id = r['result'][-1]['message']['from']['id']
         user = User(user_id)
         user.update(chat_id=user_chat_id)
-        user.rewrite_hist(last_r)
+        user.rewrite_hist(bot.updates['result'][-1])
         dictionary = Dictionary(user.id, user.dict_language)
 
-        # загружаємо останні данні
-        user_hist = load_json('user_data/' + str(user.id) +'_hist.json')
-        user_dic = dictionary.open()
+        # обробляємо запит
+        if bot.text in ('/delete', '/study', '/start', '/settings', '/stop_study', '/show'):
+            user.update(mode=bot.text, mode_step=1)
 
-        #вибираємо режим
-        if user_hist['result'][-1]['message']['text'] == '/delete':
-            user.update(mode='delete', mode_step=1)
-        elif user_hist['result'][-1]['message']['text'] == '/study':
-            user.update(mode='study', mode_step=1)
-        elif user_hist['result'][-1]['message']['text'] == '/stop_study':
+        if user.mode == "/delete":
+            delete(bot, user, dictionary)
+
+        elif user.mode == "/study" and user.mode_step < 3:
+            study(bot, user)
+
+        elif user.mode == '/stop_study':
             user.reset()
-        elif user_hist['result'][-1]['message']['text'] == '/settings':
-            user.update(mode='settings')
 
+        elif user.mode == "/settings":
+            settings(bot, user)
 
-        # обробляємо режими
-        if user.mode == "delete":
-            if user.mode_step == 1:
-                send_message(user,  text='Який номер хочешь видалити?')
-                send_message(user, text= dictionary.show_all_words())
-                user.update(mode_step=2)
-            elif user.mode_step == 2:
-                try: 
-                    #видаляємо по індексу
-                    i = int(user_hist['result'][-1]['message']['text'])
-                    dictionary.del_word(i)
-                    user.reset()
-                except:
-                    print('index not find')
-                    make_response(user, user_hist, dictionary) 
-                    user.reset()
+        elif user.mode == '/start':
+            text = "Привіт, я допоможу тобі запам'ятати нові слова. \n\nВідправляй всі слова, що хочеш перекласти, я запишу їх до словника. \n\nТи можешь подивитись свій словник, відправ мені команду /show \n\nБільше команд, ти знайдеш у меню знизу."
+            bot.send_message(user, text=text)
 
-        elif  user.mode == "study" and user.mode_step < 3:
-            if user.mode_step == 1:
-                send_message(user, text='Окей, я буду відправляти вам одне із слів')
-                send_message(user, text='Як часто відправляти?')
-                send_message(user, text='напишіть раз у скільки хвилин')
-                user.update(mode_step=2)
-            elif user.mode_step == 2:
-                try:
-                    now = time.time() 
-                    minutes = int(user_hist['result'][-1]['message']['text'])
-                    sec = minutes * 60
-                    user.update(mode_step = 3, start_time=now, wait_time=sec)
-                except:
-                    # 
-                    pass
+        elif bot.text == '/show':
+            bot.send_message(user, text=dictionary.show_all_words())
 
         else:
-            make_response(user, user_hist, dictionary) 
+            translate = translation(bot.text, user.dict_language)
+            dictionary.add_word({bot.text: translate})
+            bot.send_message(user, text=translate)
 
-        
+    else:
+        users = load_json('user_data/users.json')
+        for user in users['users']:
+            user = User(user['id'])
+            if user.mode == 'study' and user.mode_step == 3:
+                if time.time() >= user.start_time + user.wait_time:
+                    user.update(start_time=time.time())
+                    # відправляємо рандомне слово
+                    dictionary = Dictionary(user.id).open()
+                    x, y = random.choice(list(dictionary["words"].items()))
+                    bot.send_message(user, text=x + ' - ' + y)
+        sleep(2)
+
 
 if __name__ == "__main__":
-    main()
+    bot = BOT(token)
+    while True:
+        main()
